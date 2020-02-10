@@ -2,35 +2,54 @@ import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 import * as express from 'express';
 import { ApolloServer } from 'apollo-server-express';
-import * as passport from 'passport';
-import * as twitchStrategy from 'passport-twitch';
+import * as bodyParser from 'body-parser';
+import * as cookieParser from 'cookie-parser';
+import * as jwt from 'jsonwebtoken';
 
-import { typeDefs } from './typeDefs';
-import { resolvers } from './resolvers';
-import { User } from './entity/User';
+import typeDefs from './typeDefs';
+import resolvers from './resolvers';
+import { oAuthRedirect, exchangeCodeForTokenAndSaveUser } from './utils/TwitchClient';
+import twitchRoutes from './api/twitch/index';
+import { init } from './utils/Init';
+import { User } from './entity/Users';
 
 const startServer = async () => {
-  const server = new ApolloServer({ typeDefs, resolvers });
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: async ({ req }) => {
+      try {
+        if (req.cookies.token) {
+          const id = jwt.verify(req.cookies.token, process.env.TOKEN_SECRET as string) as string;
+          const user = await User.getUserById(id);
+          return { user };
+        }
+      } catch (e) {
+        return;
+      }
+      return;
+    }
+  });
   await createConnection();
 
   const app = express();
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(cookieParser());
 
-  passport.use(new twitchStrategy.Strategy({
-    clientID: 'skie54xtpjpiufhos5qearotlz9qia',
-    clientSecret: 'btttlu0ho5ivo0agl6wlefj78klxfr',
-    callbackURL: 'http://127.0.0.1:4000/auth/twitch/callback',
-    scope: 'user_read'
-  }, async (accessToken: string, refreshToken: string, profile: any) => {
-    if (profile.id) {
-      await User.create({ twitchId: profile.id, accessToken, refreshToken }).save();
+  app.get('/init', init);
+
+  app.get('/auth/twitch', oAuthRedirect);
+  app.get('/auth/twitch/callback', exchangeCodeForTokenAndSaveUser);
+  app.use('/api/twitch', twitchRoutes);
+
+  server.applyMiddleware({
+    app,
+    cors: {
+      origin: 'http://localhost:3000',
+      credentials: true
     }
-  }
-  ));
-  app.get('/auth/twitch', passport.authenticate('twitch'));
-  app.get('/auth/twitch/callback', passport.authenticate('twitch', { failureRedirect: '/' }), (_, res) => {
-    res.redirect("/");
   });
-  server.applyMiddleware({ app });
 
   app.listen({ port: 4000 }, () =>
     console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)

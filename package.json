@@ -7,20 +7,31 @@
     "@types/graphql": "^14.5.0",
     "@types/node": "^8.0.29",
     "@types/passport": "^1.0.2",
+    "nodemon": "^2.0.2",
     "ts-node": "3.3.0",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "3.3.3333"
   },
   "dependencies": {
+    "@types/cookie-parser": "^1.4.2",
+    "@types/jsonwebtoken": "^8.3.7",
+    "@types/ramda": "^0.26.40",
     "apollo-server-express": "^2.9.16",
+    "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "graphql": "^14.5.8",
-    "passport": "^0.4.1",
-    "passport-twitch": "^1.0.3",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.24.0",
     "pg": "^7.3.0",
+    "ramda": "^0.27.0",
     "reflect-metadata": "^0.1.10",
+    "tslint": "^6.0.0",
     "typeorm": "0.2.22"
   },
   "scripts": {
-    "start": "ts-node src/index.ts"
+    "start": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts"
   }
 }
