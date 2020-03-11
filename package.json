@@ -32,6 +32,8 @@
     "typeorm": "0.2.22"
   },
   "scripts": {
-    "start": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts"
+    "watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts",
+    "start": "ts-node src/index.ts",
+    "build": "tsc -p ."
   }
 }

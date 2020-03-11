@@ -56,7 +56,7 @@ export const init = async (_: any, res: any) => {
                     game: i % 2 === 0 ? 'Fortnite' : 'League of Legends',
                     title: `Stream ${i}`,
                     timestamp: moment(day).add(j, 'minutes').toDate(),
-                    viewCount: Math.floor(Math.random() * 100)
+                    count: Math.floor(Math.random() * 100)
                 }).save();
             }
         }

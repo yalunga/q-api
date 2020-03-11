@@ -17,6 +17,12 @@ export const followsResolver = {
             if (!user) return;
             return getTotalTwitchFollowing(user.twitchId, user.accessToken);
         },
-        following: async (_: any, { since }: any, { user }: any) => await Follow.getFollowing(user.twitchId, since)
+        following: async (_: any, { since }: any, { user }: any) => await Follow.getFollowing(user.twitchId, since),
+        followCountByDate: async (_: any, { measureOfTime, since }: any, { user }: any) =>
+            await Follow.getFollowCountsByMeasureOfTime(user.twitchId, measureOfTime, since),
+        followCountsByDayOfTheWeek: async (_: any, __: any, { user }: any) => await Follow.getFollowCountsByDayOfTheWeek(user.twitchId),
+        followCountsByHourOfTheDay: async (_: any, __: any, { user }: any) => await Follow.getFollowCountsByHourOfTheDay(user.twitchId),
+        followCountsByGame: async (_: any, __: any, { user }: any) => await Follow.getFollowCountsByGame(user.twitchId),
+        mostRecentFollows: async (_: any, __: any, { user }: any) => Follow.getMostRecentFollows(user.twitchId)
     }
 };

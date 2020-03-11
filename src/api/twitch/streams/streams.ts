@@ -46,7 +46,7 @@ const startTrackingStream = async (streamId: string, twitchId: string, gameId: s
                 twitchId,
                 game: await getNameFromGameId(stream.game_id, user.accessToken),
                 title,
-                viewCount: stream.viewer_count,
+                count: stream.viewer_count,
                 timestamp: moment().utc().toDate()
             }).save();
         }

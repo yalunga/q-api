@@ -78,14 +78,25 @@ export const exchangeCodeForTokenAndSaveUser = async (req: any, res: any): Promi
     });
     const { id, display_name, profile_image_url } = twitchData.data[0];
     console.log(id);
-    const user = await User.create({
-        twitchId: id,
-        twitchName: display_name,
-        accessToken,
-        refreshToken,
-        twitchProfileImage: profile_image_url
-    })
-    await user.save();
+    let user = await User.findOne({ where: { twitchId: id } });
+    if (user) {
+        await User.update({ twitchId: id }, {
+            twitchId: id,
+            twitchName: display_name,
+            accessToken,
+            refreshToken,
+            twitchProfileImage: profile_image_url
+        });
+    } else {
+        user = await User.create({
+            twitchId: id,
+            twitchName: display_name,
+            accessToken,
+            refreshToken,
+            twitchProfileImage: profile_image_url
+        }).save();
+    }
+    console.log(user);
     await enableWebhooks(id);
     setInterval(() => enableWebhooks(id), 864000 * 1000);
     const token = jwt.sign(user.id, process.env.TOKEN_SECRET as string);

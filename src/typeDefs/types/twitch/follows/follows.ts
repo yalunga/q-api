@@ -10,4 +10,29 @@ export const followsTypeDefs = gql`
       streamId: String
       game: String
   }
+
+  type FollowCountGroupedByDate {
+    date: String!
+    count: Int!
+  }
+
+  type FollowCountByDayOfTheWeek {
+    su: Int!
+    m: Int!
+    tu: Int!
+    w: Int!
+    th: Int!
+    f: Int!
+    sa: Int!
+  }
+
+  type FollowCountByHourOfTheDay {
+    houroftheday: Int!
+    count: Int!
+  }
+
+  type FollowCountByGame {
+    game: String
+    count: Int!
+  }
 `;

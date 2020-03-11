@@ -7,6 +7,26 @@ export const viewCountsTypeDefs = gql`
       timestamp: String!
       game: String!
       title: String!
-      viewCount: Int!
+      count: Int!
+  }
+
+  type ViewCountAverage {
+    date: String!
+    avg: Float!
+  }
+
+  type ViewCountsByDayOfTheWeek {
+    day: String!
+    count: Float!
+  }
+
+  type ViewCountsByHourOfTheDay {
+    houroftheday: Int!
+    count: Float!
+  }
+
+  type ViewCountsByGame {
+    game: String!
+    count: Float!
   }
 `;
