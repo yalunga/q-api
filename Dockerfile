@@ -1,15 +1,11 @@
 FROM node:10
+WORKDIR /build
 
-WORKDIR /usr/src/app
+COPY package.json yarn.lock ./
 
-COPY package.json .
+RUN yarn --production
 
-RUN yarn
-
-# Copy all other source code to work directory
-ADD . /usr/src/app
-
-RUN yarn add global ts-node
+COPY . .
 
 EXPOSE 4000
 

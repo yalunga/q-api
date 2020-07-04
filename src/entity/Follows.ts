@@ -3,38 +3,30 @@ import {
   PrimaryGeneratedColumn,
   Column,
   BaseEntity,
-  MoreThanOrEqual,
-  Index
+  MoreThanOrEqual
 } from 'typeorm';
-import * as R from 'ramda';
+import * as R from 'rambda';
 
 @Entity()
-@Index(['fromId', 'toId'], { unique: true })
 export class Follow extends BaseEntity {
 
   @PrimaryGeneratedColumn()
-  id: number;
+  public id: number;
 
   @Column()
-  fromId: string;
+  public twitchId: string;
 
   @Column()
-  fromName: string;
-
-  @Column()
-  toId: string;
-
-  @Column()
-  toName: string;
+  public count: number;
 
   @Column({ type: 'timestamp' })
-  followedAt: Date;
+  public timestamp: Date;
 
   @Column({ nullable: true })
-  streamId: string;
+  public streamId: string;
 
   @Column({ nullable: true })
-  game: string;
+  public game: string;
 
   public static async getFollows(twitchId: string, since?: Date): Promise<Follow[]> {
     const query = R.merge({ toId: twitchId }, since ? { follwedAt: MoreThanOrEqual(since) } : {});
@@ -103,7 +95,7 @@ export class Follow extends BaseEntity {
   public static async getMostRecentFollows(twitchId: string): Promise<any> {
     return await Follow.find({
       where: { twitchId },
-      order: { followedAt: 'DESC' },
+      order: { timestamp: 'DESC' },
       take: 15
     });
   }

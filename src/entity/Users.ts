@@ -1,29 +1,30 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, Unique } from 'typeorm';
+import { Entity, PrimaryColumn, Column, BaseEntity, CreateDateColumn } from 'typeorm';
 
 @Entity()
-@Unique(['twitchId'])
 export class User extends BaseEntity {
+  @PrimaryColumn()
+  public twitchId: string;
 
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @Column({ nullable: true })
+  public accessToken: string;
 
-  @Column()
-  twitchId: string;
-
-  @Column()
-  accessToken: string;
-
-  @Column()
-  refreshToken: string;
+  @Column({ nullable: true })
+  public refreshToken: string;
 
   @Column()
-  twitchName: string;
+  public twitchName: string;
 
-  @Column()
-  twitchProfileImage: string;
+  @Column({ nullable: true })
+  public twitchProfileImage: string;
+
+  @Column({ nullable: true })
+  public description: string;
+
+  @Column({ nullable: true })
+  public broadcasterType: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  public createdAt: Date;
 
   public static async getUserById(id: string): Promise<User | undefined> {
     return await User.findOne({ where: { id } });
@@ -34,5 +35,18 @@ export class User extends BaseEntity {
 
   public static async getUserByAccessToken(accessToken: string): Promise<User | undefined> {
     return await User.findOne({ where: { accessToken } });
+  }
+
+  public static async getUsersByName(name: string): Promise<User[] | undefined> {
+    try {
+      return await User
+        .createQueryBuilder()
+        .where('LOWER(User.twitchName) LIKE LOWER(:name)', { name: `${name}%` })
+        .limit(5)
+        .getMany();
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
   }
 }

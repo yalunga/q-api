@@ -4,26 +4,25 @@ import { Entity, PrimaryColumn, BaseEntity, Column, MoreThanOrEqual } from 'type
 export class Stream extends BaseEntity {
 
   @PrimaryColumn()
-  streamId: string;
-
+  public streamId: string;
 
   @Column()
-  twitchId: string;
+  public twitchId: string;
 
   @Column({ type: 'timestamp' })
-  startedAt: Date;
+  public startedAt: Date;
 
   @Column({ nullable: true, type: 'timestamp' })
-  endedAt: Date;
+  public endedAt: Date;
 
   @Column()
-  viewsAtBeginning: number;
+  public viewsAtBeginning: number;
 
   @Column({ nullable: true })
-  viewsAtEnd: number;
+  public viewsAtEnd: number;
 
   @Column({ nullable: true })
-  totalViews: number;
+  public title: string;
 
   public static async getAllStreams(twitchId: string): Promise<Stream[]> {
     return Stream.find({ where: { twitchId } });

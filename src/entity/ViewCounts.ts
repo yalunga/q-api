@@ -1,31 +1,29 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, MoreThanOrEqual } from 'typeorm';
-import * as R from 'ramda';
-import { Stream } from './Streams';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, MoreThanOrEqual } from 'typeorm';
+import * as R from 'rambda';
 
 @Entity()
 export class ViewCount extends BaseEntity {
 
   @PrimaryGeneratedColumn()
-  id: number;
+  public id: number;
 
   @Column()
-  twitchId: string;
-
-  @ManyToOne(_ => Stream)
-  @JoinColumn()
-  streamId: string;
+  public twitchId: string;
 
   @Column()
-  game: string;
+  public streamId: string;
 
   @Column()
-  title: string;
+  public game: string;
 
   @Column()
-  count: number;
+  public title: string;
+
+  @Column()
+  public count: number;
 
   @Column({ type: 'timestamp' })
-  timestamp: Date;
+  public timestamp: Date;
 
   public static async getAverageViewCount(twitchId: string, since?: Date): Promise<number> {
     const query = R.merge({ twitchId }, since ? { timestamp: MoreThanOrEqual(since) } : {});
@@ -136,7 +134,6 @@ export class ViewCount extends BaseEntity {
       .where('ViewCount.twitchId = :twitchId', { twitchId })
       .groupBy('ViewCount.game')
       .getRawMany();
-    console.log(result);
     return result;
   }
 }

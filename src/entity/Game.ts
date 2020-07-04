@@ -4,26 +4,29 @@ import { Stream } from './Streams';
 @Entity()
 export class Game extends BaseEntity {
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  public id: number;
 
-    @Column()
-    twitchId: string;
+  @Column()
+  public twitchId: string;
 
-    @ManyToOne(_ => Stream)
-    @JoinColumn()
-    streamId: string;
+  @ManyToOne(_ => Stream)
+  @JoinColumn()
+  public streamId: string;
 
-    @Column()
-    game: string;
+  @Column()
+  public game: string;
 
-    @Column()
-    title: string;
+  @Column()
+  public title: string;
 
-    @Column({ type: 'timestamp' })
-    startedAt: Date;
+  @Column({ type: 'timestamp' })
+  public startedAt: Date;
 
-    @Column({ nullable: true, type: 'timestamp' })
-    endedAt: Date;
+  @Column({ nullable: true, type: 'timestamp' })
+  public endedAt: Date;
+
+  @Column({ nullable: true })
+  public image: string;
 
 }
