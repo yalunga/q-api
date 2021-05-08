@@ -31,7 +31,7 @@
     "redis": "^3.0.2",
     "reflect-metadata": "^0.1.10",
     "tslint": "^6.0.0",
-    "typeorm": "0.2.22"
+    "typeorm": "0.2.25"
   },
   "scripts": {
     "watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts",
